@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reham - Aprende Árabe Básico</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN con configuración silenciada para entorno web -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & Cairo for Arabic support -->
+    <!-- Google Fonts: Inter & Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Marked.js for rendering markdown responses from Gemini -->
+    <!-- Marked.js para renderizar respuestas en Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <script>
@@ -65,7 +65,6 @@
     <!-- Top Navigation Header -->
     <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 glass-panel">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Brand Logo & App Name -->
             <div class="flex items-center space-x-3">
                 <div class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-emerald-500 shadow-md">
                     <img id="headerAvatar" src="REHAM  ريهام.jfif" alt="Reham - Profesor IA" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg\'>ر</div>';">
@@ -238,7 +237,7 @@
             </div>
         </section>
 
-        <!-- 5. AI TUTOR SECTION (ACTIVACIÓN AUTOMÁTICA) -->
+        <!-- 5. AI TUTOR SECTION -->
         <section id="sec-ai-tutor" class="tab-content hidden space-y-4">
             <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-md flex flex-col h-[650px]">
                 
@@ -251,7 +250,7 @@
                         <div>
                             <h3 class="font-bold text-sm text-slate-800 dark:text-slate-100">REHAM | ريهام Teacher IA</h3>
                             <p class="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> IA Activa y Lista (Sin configuración)
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> IA Activa y Lista
                             </p>
                         </div>
                     </div>
@@ -271,7 +270,7 @@
                         </div>
                         <div class="bg-slate-100 dark:bg-slate-700/60 p-3.5 rounded-2xl rounded-tl-none max-w-xl text-sm space-y-1">
                             <p class="font-bold text-xs text-emerald-600 dark:text-emerald-400">REHAM | ريهام Teacher IA</p>
-                            <p class="prose dark:prose-invert">¡Marhaban! (مَرْحَبًا). Soy tu profesora personal de árabe. La IA está **activada automáticamente** en tu equipo. Puedes preguntarme cualquier duda de traducción, gramática o dialectos directamente.</p>
+                            <p class="prose dark:prose-invert">¡Marhaban! (مَرْحَبًا). Soy tu profesora personal de árabe. La asistente de IA está lista. Puedes preguntarme cualquier duda sobre traducción, gramática o dialectos.</p>
                         </div>
                     </div>
                 </div>
@@ -297,11 +296,8 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // CONFIGURACIÓN AUTOMÁTICA DE API KEY SEGÚN ENTORNO O DEPLOYMENT
-        // Busca la API Key desde variables globales del sistema, servidor proxy o fallback embebido sin molestar al usuario.
-        const AUTO_GEMINI_KEY = window.GEMINI_API_KEY || "AIzaSy_AUTOMATIC_EMBEDDED_KEY_OR_ENV_VAR";
+        const AUTO_GEMINI_KEY = window.GEMINI_API_KEY || "";
 
-        // System Prompt para la profesora Reham
         const SYSTEM_PROMPT = `Eres Reham (ريهام), una profesora nativa, experta y apasionada de lengua y cultura árabe. Tu objetivo es enseñar árabe básico de forma pedagógica, amigable, clara y respetuosa. 
 Reglas de respuesta:
 1. Responde siempre en español fluido.
@@ -317,7 +313,6 @@ Reglas de respuesta:
         let cardIndex = 0;
         let isFlipped = false;
 
-        // Vocabulary Database
         const vocabulary = [
             { arabic: 'مَرْحَبًا', phonetic: 'Marhaban', spanish: 'Hola', context: 'Saludo formal y amigable común en todo el mundo árabe.' },
             { arabic: 'أَهْلًا وَسَهْلًا', phonetic: 'Ahlan wa Sahlan', spanish: 'Bienvenido / Bienvenido seas', context: 'Expresión cálida de hospitalidad.' },
@@ -331,7 +326,6 @@ Reglas de respuesta:
             { arabic: 'رِهَام', phonetic: 'Reham', spanish: 'Llovizna suave', context: 'Representa la lluvia fina y reconfortante.' }
         ];
 
-        // Quiz Database
         const quizQuestions = [
             {
                 q: "¿Qué significa la expresión 'يا عُمري' (Ya Omri)?",
@@ -487,8 +481,6 @@ Reglas de respuesta:
             renderQuiz();
         }
 
-        // --- ENVIAR MENSAJE A LA IA ACTIVADA AUTOMÁTICAMENTE ---
-
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const userMsg = input.value.trim();
@@ -522,11 +514,16 @@ Reglas de respuesta:
 
             let replyText = "";
 
-            try {
-                replyText = await fetchGeminiResponse(userMsg, AUTO_GEMINI_KEY);
-            } catch (error) {
-                console.log("Servicio en vivo activando fallback:", error);
-                await new Promise(r => setTimeout(r, 500));
+            if (AUTO_GEMINI_KEY && AUTO_GEMINI_KEY !== "") {
+                try {
+                    replyText = await fetchGeminiResponse(userMsg, AUTO_GEMINI_KEY);
+                } catch (error) {
+                    console.log("Servicio en vivo activando fallback:", error);
+                    await new Promise(r => setTimeout(r, 400));
+                    replyText = getSmartFallbackResponse(userMsg);
+                }
+            } else {
+                await new Promise(r => setTimeout(r, 400));
                 replyText = getSmartFallbackResponse(userMsg);
             }
 
@@ -584,15 +581,16 @@ Reglas de respuesta:
             return textResult;
         }
 
-        // Respuestas automáticas instantáneas si la conexión directa a Gemini requiere fallback local
         function getSmartFallbackResponse(msg) {
             const lower = msg.toLowerCase();
             if (lower.includes('amor') || lower.includes('habibi') || lower.includes('cariño')) {
-                return `En árabe existen varias expresiones hermosas para transmitir cariño:\n\n* **يا حَبيبي** (*Ya Habibi*) — "Mi amor" (dirigido a un hombre).\n* **يا حَبيبتي** (*Ya Habibti*) — "Mi amor" (dirigido a una mujer).\n* **يا عُمري** (*Ya 'Omri*) — "Mi vida".\n* **يا قَلبي** (*Ya Qalbi*) — "Mi corazón".\n\n💡 *Variante poética:* **يا نُور عَيْني** (*Ya Nur 'Ayni*), que significa *"Luz de mis ojos"*[cite: 5].`;
+                return `En árabe existen varias expresiones hermosas para transmitir cariño:\n\n* **يا حَبيبي** (*Ya Habibi*) — "Mi amor" (dirigido a un hombre).\n* **يا حَبيبتي** (*Ya Habibti*) — "Mi amor" (dirigido a una mujer).\n* **يا عُمري** (*Ya 'Omri*) — "Mi vida".\n* **يا قَلبي** (*Ya Qalbi*) — "Mi corazón".\n\n💡 *Variante poética:* **يا نُور عَيْني** (*Ya Nur 'Ayni*), que significa *"Luz de mis ojos"*.`;
             } else if (lower.includes('gracias') || lower.includes('de nada')) {
-                return `Para dar las gracias se utiliza **شُكْرًا** (*Shukran*) y para responder "de nada" se dice **عَفْوًا** (*'Afwan*).\n\nSi quieres dar un agradecimiento más formal o profundo, puedes decir **شُكْرًا جَزيلاً** (*Shukran Jazeelan*) — *"Muchas gracias"*[cite: 5].`;
+                return `Para dar las gracias se utiliza **شُكْرًا** (*Shukran*) y para responder "de nada" se dice **عَفْوًا** (*'Afwan*).\n\nSi quieres dar un agradecimiento más formal o profundo, puedes decir **شُكْرًا جَزيلاً** (*Shukran Jazeelan*) — *"Muchas gracias"*.`;
             } else if (lower.includes('restaurante') || lower.includes('comida')) {
-                return `Frases esenciales para un restaurante árabe:\n\n1. **أُاريدُ هَذا مِنْ فَضْلِك** (*Ureedu hadha min fadlik*) — *"Quiero esto, por favor"*.\n2. **القَائِمَة مِنْ فَضْلِك** (*Al-qa'imah min fadlik*) — *"La carta/menú, por favor"*.\n3. **الحِساب مِنْ فَضْلِك** (*Al-hisab min fadlik*) — *"La cuenta, por favor"*[cite: 5].`;
+                return `Frases esenciales para un restaurante árabe:\n\n1. **أُاريدُ هَذا مِنْ فَضْلِك** (*Ureedu hadha min fadlik*) — *"Quiero esto, por favor"*.\n2. **القَائِمَة مِنْ فَضْلِك** (*Al-qa'imah min fadlik*) — *"La carta/menú, por favor"*.\n3. **الحِساب مِنْ فَضْلِك** (*Al-hisab min fadlik*) — *"La cuenta, por favor"*.`;
+            } else if (lower.includes('marroqui') || lower.includes('darija') || lower.includes('clasico') || lower.includes('dialecto')) {
+                return `El árabe clásico o Árabe Estándar Moderno (**Fusha / الفصحى**) es la lengua oficial utilizada en libros, noticias y educación en todo el mundo árabe.\n\nPor otro lado, el **Darija (الدارجة)** es el dialecto hablado cotidiano en Marruecos, con fuerte influencia del amazigh (bereber), francés y español.`;
             } else {
                 return `¡Excelente pregunta! En árabe clásico (Fusha) es muy importante la pronunciación correcta de los sonidos vocálicos. ¿Quieres practicar algún vocabulario o frase en específico con la Profesora Reham?`;
             }
